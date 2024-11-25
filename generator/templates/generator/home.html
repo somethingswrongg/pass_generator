@@ -1,0 +1,59 @@
+{% extends 'generator/base.html' %}
+
+{% block title %}
+    Домашняя страница
+{% endblock title %}
+
+
+{% block body %}
+    <div class="fixed-container">
+        <div>
+            <h1>СОЗДАНИЕ ПАРОЛЯ</h1>
+        </div>
+        <div>
+            {% if user.is_authenticated %}
+            Привет, {{ user.username }}
+            <a href="{% url 'generator:logout' %}" class="btn btn btn-outline-secondary">Выход</a>
+            <a href="{% url 'generator:passlist' %}" class="btn btn btn-outline-secondary">Ваши пароли</a>
+
+        {% else %}
+            <a href="{% url 'generator:login' %}" class="btn btn btn-outline-secondary">Вход</a>
+            <a href="{% url 'generator:register' %}" class="btn btn btn-outline-secondary">Регистрация</a>
+        {% endif %}
+        </div>
+    </div>
+    <br>
+    <div class="param-pass-home">
+        <p>ПАРАМЕТРЫ ПАРОЛЯ::</p>
+    </div>
+    <div class="fixed-container-menu-home">
+
+        <form action="{% url 'generator:password' %}" method="GET">
+            <select name="lenght">
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12" selected="selected">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+            </select> Длина
+            <br>
+            <input type="checkbox" name="uppercase"> Верхний регистр
+            <br>
+            <input type="checkbox" name="numbers"> Числа
+            <br>
+            <input type="checkbox" name="special"> Специальные символы
+            <br>
+            <div class="param-pass-home">
+            <input type="submit" value="Получить пароль" class="btn btn btn-outline-secondary">
+            </div>
+        </form>
+    </div>
+    <div class="param-pass-home">
+        <a href="{% url 'generator:about' %}" class="btn btn btn-outline-secondary">О проекте</a>
+    </div>
+{% endblock body %}
+

@@ -1,0 +1,44 @@
+{% extends './base.html' %}
+
+{% block title %}
+    Созданные пароли
+{% endblock title %}
+
+{% block body %}
+
+    <div class="pass-title">
+        <h1>ВАШИ ПАРОЛИ:</h1>
+    </div>
+    <div class='container text-center pass-list'>
+
+        {% if user.is_authenticated %}
+            {% if passwords_list %}
+                <table class="table table-striped pass-list">
+                    <tr>
+                        <td>Имя:</td>
+                        <td>Пароль:</td>
+                        <td>Создан:</td>
+                    </tr>
+                </table>
+                {% for item in passwords_list %}
+                    <table class="table table-striped pass-list">
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ item.password }}</td>
+                        <td>{{ item.created_at }}</td>
+                    </tr>
+                </table>
+            {% endfor %}
+        {% else %}
+            <h6>{{ user.username }}, пока в базе нет паролей</h6>
+        {% endif %}
+            {% else %}
+            <a href="{% url 'generator:login' %}" class="btn btn btn-outline-secondary">Войти</a>
+
+        {% endif %}
+        <br>
+        <a href="{% url 'generator:home' %}" class="btn btn-outline-secondary">На главную</a>
+    </div>
+
+{% endblock body %}
+

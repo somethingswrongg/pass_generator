@@ -1,0 +1,20 @@
+{% extends "generator/base.html" %}
+
+{% block title %}
+    О пользователе
+{% endblock %}
+
+{% block body %}
+    <div class='container text-center'>
+        <h1>Информация о пользователе</h1>
+        {% if user.is_authenticated %}
+            <h2>Подробнее</h2>
+            <p>Пользователь: {{ user.username }}</p>
+            <p>Имя: {{ user.first_name }}</p>
+            <p>e-mail: {{ user.email }}</p>
+        {% else %}
+            <h2>Не авторизованный пользователь</h2>
+        {% endif %}
+    <a href="{% url 'generator:home' %}" class="btn btn-outline-secondary">На главную</a>
+    </div>
+{% endblock %}

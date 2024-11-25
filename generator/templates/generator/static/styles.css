@@ -1,0 +1,92 @@
+.param-pass-home {
+    display: flex;
+    justify-content: center;
+    padding: 4px;
+}
+
+.fixed-container {
+    margin-top: 20px;
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1000px;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.fixed-container-menu-home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 1000px;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.register {
+    text-align: center;
+}
+
+.reg-form {
+    max-width: 36%;
+    margin: 0 auto;
+}
+
+/* .reg-form > div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.reg-form__input {
+    width: 50%;
+}
+
+.reg-form textarea {
+    height: 150px;
+} */
+body {
+    width: auto;
+    min-width: 1200px;
+    justify-content: center;
+    margin: 20px;
+    font-weight: 400;
+    display: contents;
+}
+
+h1 {
+    font-weight: 400;
+}
+
+.footer {
+    height: 100px;
+    margin: auto;
+    width: auto;
+    text-align: center;
+    padding: 10px;
+}
+
+.about-article {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.pass-title {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.pass-list {
+    width: 60%;
+    table-layout: fixed;
+    margin: auto;
+}
+
+.h3 {
+    text-align: center;
+}

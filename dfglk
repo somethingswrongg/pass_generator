@@ -1,0 +1,129 @@
+[1mdiff --git a/db.sqlite3 b/db.sqlite3[m
+[1mindex 9adcf7b..bd34f56 100644[m
+Binary files a/db.sqlite3 and b/db.sqlite3 differ
+[1mdiff --git a/generator/__pycache__/models.cpython-311.pyc b/generator/__pycache__/models.cpython-311.pyc[m
+[1mindex 80cf63c..bc7aacb 100644[m
+Binary files a/generator/__pycache__/models.cpython-311.pyc and b/generator/__pycache__/models.cpython-311.pyc differ
+[1mdiff --git a/generator/__pycache__/urls.cpython-311.pyc b/generator/__pycache__/urls.cpython-311.pyc[m
+[1mindex deb5899..6f7a6eb 100644[m
+Binary files a/generator/__pycache__/urls.cpython-311.pyc and b/generator/__pycache__/urls.cpython-311.pyc differ
+[1mdiff --git a/generator/__pycache__/views.cpython-311.pyc b/generator/__pycache__/views.cpython-311.pyc[m
+[1mindex 039cf0a..a63dc89 100644[m
+Binary files a/generator/__pycache__/views.cpython-311.pyc and b/generator/__pycache__/views.cpython-311.pyc differ
+[1mdiff --git a/generator/models.py b/generator/models.py[m
+[1mindex abba1ad..11c8bc3 100644[m
+[1m--- a/generator/models.py[m
+[1m+++ b/generator/models.py[m
+[36m@@ -2,11 +2,8 @@[m [mfrom django.contrib.auth.models import User[m
+ from django.db import models[m
+ [m
+ [m
+[31m-class Profile(models.Model):[m
+[31m-    user = models.ForeignKey(User, on_delete=models.CASCADE)[m
+[32m+[m[32mclass Passwords(models.Model):[m
+[32m+[m[32m    password = models.CharField(max_length=14)[m
+ [m
+ [m
+[31m-class Passwords(models.Model):[m
+[31m-    created_password = models.ManyToManyField(Profile, related_name='passwords')[m
+[31m-    created_at = models.DateTimeField(auto_now_add=True)[m
+[31m-    password = models.CharField(max_length=14)[m
+\ No newline at end of file[m
+[32m+[m[32mclass Profile(models)[m
+\ No newline at end of file[m
+[1mdiff --git a/generator/templates/generator/created_pass.html b/generator/templates/generator/created_pass.html[m
+[1mindex 79f61a1..6d3ccd7 100644[m
+[1m--- a/generator/templates/generator/created_pass.html[m
+[1m+++ b/generator/templates/generator/created_pass.html[m
+[36m@@ -42,6 +42,7 @@[m
+             <h6>{{ user.username }}, пока в базе нет паролей</h6>[m
+         {% endif %}[m
+             {% else %}[m
+[32m+[m[32m            <h6>Выполните вход для просмотра сохраненных паролей</h6>[m
+             <a href="{% url 'generator:login' %}" class="btn btn btn-outline-secondary">Войти</a>[m
+ [m
+         {% endif %}[m
+[1mdiff --git a/generator/templates/generator/test_page.html b/generator/templates/generator/test_page.html[m
+[1mindex 4bdcfcb..382ac02 100644[m
+[1m--- a/generator/templates/generator/test_page.html[m
+[1m+++ b/generator/templates/generator/test_page.html[m
+[36m@@ -1,10 +1,5 @@[m
+[31m-<!DOCTYPE html>[m
+[31m-<html lang="en">[m
+[31m-<head>[m
+[31m-  <meta charset="UTF-8">[m
+[31m-  <title>$Title$</title>[m
+[31m-</head>[m
+[31m-<body>[m
+[31m-$END$[m
+[31m-</body>[m
+[31m-</html>[m
+\ No newline at end of file[m
+[32m+[m[32m{% extends "generator/base.html" %}[m
+[32m+[m
+[32m+[m[32m{% block body %}[m
+[32m+[m
+[32m+[m[32m{% endblock %}[m
+\ No newline at end of file[m
+[1mdiff --git a/generator/urls.py b/generator/urls.py[m
+[1mindex 3dc688a..7f15349 100644[m
+[1m--- a/generator/urls.py[m
+[1m+++ b/generator/urls.py[m
+[36m@@ -20,4 +20,5 @@[m [murlpatterns = [[m
+     path("logout/", views.logout_view, name="logout"),[m
+     path("about-me/", AboutMeView.as_view(), name="about-me"),[m
+     path("register/", RegisterView.as_view(), name="register"),[m
+[32m+[m[32m    path("test-page/", views.test_page, name="test_page"),[m
+ ][m
+[1mdiff --git a/generator/views.py b/generator/views.py[m
+[1mindex 703d913..5815d63 100644[m
+[1m--- a/generator/views.py[m
+[1m+++ b/generator/views.py[m
+[36m@@ -8,7 +8,7 @@[m [mfrom django.shortcuts import render, redirect[m
+ from django.urls import reverse_lazy, reverse[m
+ from django.views.generic import CreateView, TemplateView[m
+ [m
+[31m-from generator.models import Passwords[m
+[32m+[m[32mfrom generator.models import Passwords, ViewPassword[m
+ [m
+ [m
+ class RegisterView(CreateView):[m
+[36m@@ -29,6 +29,7 @@[m [mclass RegisterView(CreateView):[m
+         login(request=self.request, user=user)[m
+         return response[m
+ [m
+[32m+[m
+ def login_view(request: HttpRequest) -> HttpResponse:[m
+     if request.method == "GET":[m
+         if request.user.is_authenticated:[m
+[36m@@ -74,7 +75,6 @@[m [mdef password(request):[m
+         thepassword += random.choice(characters)[m
+ [m
+     password_to_models = Passwords(password=thepassword, created_at=datetime)[m
+[31m-[m
+     password_to_models.save()[m
+ [m
+     return render(request, 'generator/password.html', {'password': thepassword})[m
+[36m@@ -90,7 +90,7 @@[m [mdef about(request):[m
+ [m
+ def pass_list(request):[m
+     context = {[m
+[31m-        "passwords_list": Passwords.objects.all(),[m
+[32m+[m[32m        "passwords_list": Passwords.objects.filter(user=request.user),[m
+     }[m
+ [m
+     return render(request, 'generator/created_pass.html', context=context)[m
+[36m@@ -98,3 +98,13 @@[m [mdef pass_list(request):[m
+ [m
+ class AboutMeView(TemplateView):[m
+     template_name = "generator/about_me.html"[m
+[32m+[m
+[32m+[m
+[32m+[m[32mdef test_page(request: HttpRequest) -> HttpResponse:[m
+[32m+[m[32m    if request.user.is_authenticated:[m
+[32m+[m
+[32m+[m[32m        context = {[m
+[32m+[m[32m            'show_pass': ViewPassword.objects.all()[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        return render(request, 'generator/test_page.html', context=context)[m
